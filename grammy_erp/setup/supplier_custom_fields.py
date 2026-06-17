@@ -17,26 +17,15 @@ def apply():
              "fieldtype": "Data", "insert_after": "custom_email"},
             {"fieldname": "custom_address", "label": "Address",
              "fieldtype": "Small Text", "insert_after": "custom_contact_number"},
-            {"fieldname": "custom_finance_section", "label": "Bank & Certificates (Admin)",
-             "fieldtype": "Section Break", "insert_after": "custom_address", "permlevel": 1},
             {"fieldname": "custom_bank_account_number", "label": "Bank Account Number",
-             "fieldtype": "Data", "insert_after": "custom_finance_section", "permlevel": 1},
+             "fieldtype": "Data", "insert_after": "custom_address"},
             {"fieldname": "custom_ifsc_code", "label": "IFSC Code",
-             "fieldtype": "Data", "insert_after": "custom_bank_account_number", "permlevel": 1},
+             "fieldtype": "Data", "insert_after": "custom_bank_account_number"},
             {"fieldname": "custom_gst_certificate", "label": "GST Certificate",
-             "fieldtype": "Attach", "insert_after": "custom_ifsc_code", "permlevel": 1},
+             "fieldtype": "Attach", "insert_after": "custom_ifsc_code"},
             {"fieldname": "custom_msme_certificate", "label": "MSME/UDYAM Certificate",
-             "fieldtype": "Attach", "insert_after": "custom_gst_certificate", "permlevel": 1},
+             "fieldtype": "Attach", "insert_after": "custom_gst_certificate"},
         ]
     }
     create_custom_fields(fields, update=True)
-
-    for role in ("Accounts Manager", "System Manager"):
-        if not frappe.db.exists("Custom DocPerm",
-                                {"parent": "Supplier", "role": role, "permlevel": 1}):
-            frappe.get_doc({
-                "doctype": "Custom DocPerm", "parent": "Supplier",
-                "parenttype": "DocType", "parentfield": "permissions",
-                "role": role, "permlevel": 1, "read": 1, "write": 1,
-            }).insert(ignore_permissions=True)
     frappe.db.commit()

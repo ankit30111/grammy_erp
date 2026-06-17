@@ -1,0 +1,37 @@
+name: Build Frontend
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "frontend_overrides/**"
+      - ".github/workflows/build-frontend.yml"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clone Lovable front-end
+        run: git clone --depth 1 https://github.com/ankit30111/grammy-erp-428fb1d9.git fe
+      - name: Apply ERPNext overrides
+        run: |
+          cp -R frontend_overrides/src/. fe/src/
+          cp frontend_overrides/vite.config.ts fe/vite.config.ts
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install and build
+        run: cd fe && npm install --no-audit --no-fund && npx vite build
+      - name: Copy build into app
+        run: |
+          rm -rf grammy_erp/public/frontend
+          mkdir -p grammy_erp/public/frontend
+          cp -R fe/dist/. grammy_erp/public/frontend/
+      - name: Commit built assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add grammy_erp/public/frontend
+          git commit -m "Build frontend assets [skip ci]" || echo "no changes"
+          git push

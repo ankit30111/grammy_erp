@@ -1,0 +1,17 @@
+{% raw %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grammy ERP</title>
+    <link rel="stylesheet" href="/assets/grammy_erp/frontend/index.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>{% endraw %}
+      window.csrf_token = "{{ csrf_token }}";
+      window.boot_user = "{{ boot_user }}";
+    {% raw %}</script>
+    <script type="module" src="/assets/grammy_erp/frontend/index.js"></script>
+  </body>
+</html>{% endraw %}

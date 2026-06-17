@@ -1,0 +1,17 @@
+import{r as N,b as g,j as e,P as n,C as y,e as _,f as v,h as i,g as P,T as w,i as b,k as m,l as t,m as E,p as r,t as C,B as T,E as R,s as D}from"../index.js";const S=N.memo(({onSelectVoucher:x})=>{const{data:c=[],isLoading:j}=g({queryKey:["production-orders-list"],queryFn:async()=>{console.log("🔍 Fetching production orders list...");const{data:s,error:a}=await D.from("production_orders").select(`
+          id,
+          voucher_number,
+          quantity,
+          scheduled_date,
+          status,
+          kit_status,
+          created_at,
+          products!product_id (
+            name
+          ),
+          production_schedules!production_schedule_id (
+            projections!projection_id (
+              customers!customer_id (name)
+            )
+          )
+        `).order("created_at",{ascending:!1}).limit(50);if(a)throw console.error("❌ Error fetching production orders:",a),a;return console.log("📋 Production orders fetched:",(s==null?void 0:s.length)||0),s||[]},refetchInterval:3e4,staleTime:2e4}),p=s=>{switch(s){case"COMPLETED":return"default";case"IN_PROGRESS":return"secondary";case"PENDING":return"outline";default:return"outline"}},f=s=>{switch(s){case"PREPARED":return"default";case"PARTIAL":return"secondary";case"NOT_PREPARED":return"destructive";default:return"outline"}};return j?e.jsx("div",{className:"flex items-center justify-center py-8",children:e.jsxs("div",{className:"text-center",children:[e.jsx(n,{className:"h-12 w-12 mx-auto text-muted-foreground mb-2 animate-pulse"}),e.jsx("p",{className:"text-muted-foreground",children:"Loading production vouchers..."})]})}):e.jsxs(y,{children:[e.jsx(_,{children:e.jsxs(v,{className:"flex items-center gap-2",children:[e.jsx(n,{className:"h-5 w-5"}),"Production Vouchers (",c.length,")",e.jsx(i,{variant:"outline",children:"Real-time Material Dispatch"})]})}),e.jsx(P,{children:c.length===0?e.jsxs("div",{className:"text-center py-8 text-muted-foreground",children:[e.jsx(n,{className:"h-12 w-12 mx-auto mb-2 text-muted-foreground/50"}),e.jsx("p",{children:"No production vouchers found"}),e.jsx("p",{className:"text-sm mt-1",children:"Production vouchers will appear here when created"})]}):e.jsx("div",{className:"overflow-x-auto",children:e.jsxs(w,{children:[e.jsx(b,{children:e.jsxs(m,{children:[e.jsx(t,{children:"Voucher Number"}),e.jsx(t,{children:"Product"}),e.jsx(t,{children:"Customer"}),e.jsx(t,{children:"Quantity"}),e.jsx(t,{children:"Scheduled Date"}),e.jsx(t,{children:"Status"}),e.jsx(t,{children:"Kit Status"}),e.jsx(t,{children:"Actions"})]})}),e.jsx(E,{children:c.map(s=>{var a,o,d,l,u,h;return e.jsxs(m,{children:[e.jsx(r,{className:"font-mono font-medium",children:s.voucher_number}),e.jsx(r,{children:(a=s.products)==null?void 0:a.name}),e.jsx(r,{children:((l=(d=(o=s.production_schedules)==null?void 0:o.projections)==null?void 0:d.customers)==null?void 0:l.name)||"N/A"}),e.jsx(r,{className:"font-medium",children:s.quantity}),e.jsx(r,{children:C(new Date(s.scheduled_date),"MMM dd, yyyy")}),e.jsx(r,{children:e.jsx(i,{variant:p(s.status),children:(u=s.status)==null?void 0:u.replace("_"," ")})}),e.jsx(r,{children:e.jsx(i,{variant:f(s.kit_status),children:((h=s.kit_status)==null?void 0:h.replace("_"," "))||"Not Ready"})}),e.jsx(r,{children:e.jsxs(T,{variant:"outline",size:"sm",onClick:()=>x(s.id),className:"gap-1",children:[e.jsx(R,{className:"h-3 w-3"}),"View Details"]})})]},s.id)})})]})})})]})});S.displayName="ProductionVoucherList";export{S as default};

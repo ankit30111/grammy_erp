@@ -31,7 +31,6 @@ const SUPPLIER_FIELDS = [
   "supplier_name",
   "supplier_group",
   "tax_id",
-  "disabled",
   "custom_contact_person_name",
   "custom_email",
   "custom_contact_number",
@@ -45,7 +44,7 @@ function toVendor(s: any) {
     vendor_code: s.name,
     name: s.supplier_name,
     gst_number: s.tax_id || "",
-    is_active: !s.disabled,
+    is_active: s.disabled === undefined ? true : !s.disabled,
     contact_person_name: s.custom_contact_person_name || null,
     email: s.custom_email || null,
     contact_number: s.custom_contact_number || null,
@@ -113,7 +112,6 @@ export const useVendors = () => {
     queryFn: async () => {
       const rows = await erp.getList<any>("Supplier", {
         fields: SUPPLIER_FIELDS,
-        filters: [["disabled", "=", 0]],
         limit: 0,
         orderBy: "modified desc",
       });
